@@ -10,7 +10,7 @@ import {
   getContext,
 } from "./graphics";
 import { indexToColor } from "./indexToColor";
-import { getPreTrainedNetworks } from "./preTrained";
+import { getPreTrainedNetworks } from "./getPreTrained";
 import "./style.css";
 
 function setup() {

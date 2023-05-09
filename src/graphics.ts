@@ -2,7 +2,7 @@ import { Car } from "./Car";
 import { Line } from "./Line";
 import { Point } from "./Point";
 import { clamp } from "./clamp";
-import { hsl, indexToColor } from "./indexToColor";
+import { hsl } from "./indexToColor";
 
 let context: CanvasRenderingContext2D;
 
