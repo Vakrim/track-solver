@@ -1,6 +1,5 @@
-import { Brain } from "./Brain";
 import { Car } from "./Car";
-import { Neuron } from "./Neuron";
+import { Network } from "./Network";
 import { Point } from "./Point";
 import { createTrack } from "./createTrack";
 import {
@@ -11,7 +10,7 @@ import {
   getContext,
 } from "./graphics";
 import { indexToColor } from "./indexToColor";
-import { getPreTrainedBrains } from "./pretrained";
+import { getPreTrainedNetworks } from "./preTrained";
 import "./style.css";
 
 function setup() {
@@ -19,9 +18,9 @@ function setup() {
 
   const track = createTrack();
 
-  const goodBrains: Brain[] = getPreTrainedBrains();
+  const goodNetworks: Network[] = getPreTrainedNetworks();
 
-  const cars = Array.from({ length: 100 }, () => createCar(goodBrains));
+  const cars = Array.from({ length: 100 }, () => createCar(goodNetworks));
 
   let gateHighScore = 0;
 
@@ -36,26 +35,30 @@ function setup() {
       for (let i = 0; i < cars.length; i++) {
         cars[i].update(track);
 
+        if (cars[i].currentGateScore > gateHighScore + 10) {
+          // kill car to share knowledge
+          cars[i].isDead = true;
+        }
+
         if (cars[i].isDead) {
           const deadCar = cars[i];
 
           if (deadCar.currentGateScore > gateHighScore) {
             gateHighScore = cars[i].currentGateScore;
 
-            if (goodBrains.length >= 10) {
-              goodBrains.shift();
+            if (goodNetworks.length >= 10) {
+              goodNetworks.shift();
             }
 
-            goodBrains.push({
-              steeringNeuron: deadCar.steeringNeuron.clone(),
-              accelerationNeuron: deadCar.accelerationNeuron.clone(),
-            });
+            goodNetworks.push(deadCar.network.clone());
 
             console.log(gateHighScore);
-            console.log(goodBrains);
+            console.groupCollapsed("Networks");
+            console.log(JSON.stringify(goodNetworks.map((n) => n.serialize())));
+            console.groupEnd();
           }
 
-          cars[i] = createCar(goodBrains);
+          cars[i] = createCar(goodNetworks);
         }
       }
     }
@@ -78,16 +81,17 @@ function setup() {
   };
 }
 
-function createCar(goodBrains: Brain[]) {
+function createCar(goodNetworks: Network[]) {
   const car = new Car(new Point(120, 80));
 
-  const randomBrain = goodBrains[Math.floor(Math.random() * goodBrains.length)];
+  const randomNetwork =
+    Math.random() < 0.5
+      ? sample(goodNetworks)
+      : sample(getPreTrainedNetworks());
 
-  car.steeringNeuron = randomBrain.steeringNeuron.clone();
-  car.accelerationNeuron = randomBrain.accelerationNeuron.clone();
+  car.network = randomNetwork.clone();
 
-  car.steeringNeuron.mutate();
-  car.accelerationNeuron.mutate();
+  car.network.mutate();
 
   return car;
 }
@@ -106,4 +110,8 @@ declare global {
   interface Window {
     timeCompression: number;
   }
+}
+
+function sample<T>(array: T[]) {
+  return array[Math.floor(Math.random() * array.length)];
 }

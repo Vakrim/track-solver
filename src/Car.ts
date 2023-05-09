@@ -1,5 +1,5 @@
 import { Line } from "./Line";
-import { Neuron } from "./Neuron";
+import { Network } from "./Network";
 import { Point } from "./Point";
 import { Track } from "./Track";
 import { getIntersectionOfLines } from "./getIntersectionOfLines";
@@ -15,8 +15,7 @@ export class Car {
 
   public life = 200;
 
-  public steeringNeuron = Neuron.createRandom(5);
-  public accelerationNeuron = Neuron.createRandom(5);
+  public network = Network.createRandom(5, [5], 2);
 
   constructor(public position: Point) {}
 
@@ -31,8 +30,10 @@ export class Car {
 
     const inputs = rays.map((ray) => ray / this.rayLength);
 
-    const steeringOutput = this.steeringNeuron.feedforward(inputs);
-    const accelerationOutput = this.accelerationNeuron.feedforward(inputs);
+    const outputs = this.network.feedforward(inputs);
+
+    const steeringOutput = outputs[0];
+    const accelerationOutput = outputs[1];
 
     this.orientation += steeringOutput * 0.1;
     this.speed += accelerationOutput * 0.1;
