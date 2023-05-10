@@ -7,6 +7,7 @@ import {
   createCanvasAndGetContext,
   drawCar,
   drawLine,
+  drawNetwork,
   getContext,
 } from "./graphics";
 import { indexToColor } from "./indexToColor";
@@ -78,6 +79,12 @@ function setup() {
     for (let i = 0; i < cars.length; i++) {
       drawCar(cars[i]);
     }
+
+    drawNetwork(
+      cars[Math.floor(new Date().getTime() / 300) % cars.length].network,
+      600,
+      20
+    );
   };
 }
 
@@ -105,7 +112,6 @@ requestAnimationFrame(function loop() {
 
 window.timeCompression = 1;
 
-// typescript extend window with timeCompression
 declare global {
   interface Window {
     timeCompression: number;

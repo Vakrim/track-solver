@@ -34,6 +34,10 @@ export class Matrix {
     return new Matrix(this.rows, other.cols, data);
   }
 
+  get(row: number, col: number) {
+    return this.data[row * this.cols + col];
+  }
+
   add(other: Matrix) {
     if (this.rows !== other.rows || this.cols !== other.cols)
       throw new Error(
@@ -47,6 +51,23 @@ export class Matrix {
     }
 
     return new Matrix(this.rows, this.cols, data);
+  }
+
+  resize(rows: number, cols: number) {
+    if (rows * cols < this.rows * this.cols)
+      throw new Error(
+        `New matrix must be bigger than the original ${this.getSizeInspect()}, (${rows}, ${cols})`
+      );
+
+    const data = new Array(rows * cols).fill(0);
+
+    for (let row = 0; row < Math.min(this.rows, rows); row++) {
+      for (let col = 0; col < Math.min(this.cols, cols); col++) {
+        data[row * cols + col] = this.data[row * this.cols + col];
+      }
+    }
+
+    return new Matrix(rows, cols, data);
   }
 
   getSizeInspect() {

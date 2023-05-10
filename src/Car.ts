@@ -15,7 +15,7 @@ export class Car {
 
   public life = 200;
 
-  public network = Network.createRandom(5, [5], 2);
+  public network = Network.createRandom(6, [5], 2);
 
   constructor(public position: Point) {}
 
@@ -28,7 +28,10 @@ export class Car {
 
     const rays = this.observe(track);
 
-    const inputs = rays.map((ray) => ray / this.rayLength);
+    const inputs = [
+      ...rays.map((ray) => ray / this.rayLength),
+      this.speed / 10,
+    ];
 
     const outputs = this.network.feedforward(inputs);
 
@@ -80,7 +83,7 @@ export class Car {
     if (intersection) {
       this.currentGateScore++;
       this.nextGateIndex = this.currentGateScore % track.gates.length;
-      this.life = 100;
+      this.life = 50;
     }
   }
 
@@ -132,8 +135,6 @@ export class Car {
     if (!closestIntersection) {
       return this.rayLength;
     }
-
-    // drawPoint(closestIntersection.point);
 
     return closestIntersection.distance;
   }
