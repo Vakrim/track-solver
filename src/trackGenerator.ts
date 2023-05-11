@@ -1,6 +1,7 @@
-import { Vector } from "./Vector";
+import { Line } from "./Line";
 import { Point } from "./Point";
-import { createCanvas, drawVector, getContext } from "./graphics";
+import { Vector } from "./Vector";
+import { createCanvas, drawLine, getContext } from "./graphics";
 import { runLoop } from "./runLoop";
 import "./style.css";
 
@@ -14,8 +15,8 @@ function setup() {
   function draw() {
     getContext().strokeStyle = "black";
 
-    middleLine.forEach((vector) => {
-      drawVector(vector);
+    middleLine.forEach((line) => {
+      drawLine(line);
     });
   }
 
@@ -34,22 +35,21 @@ function generateBorders(middleLine: Vector[]) {
 function generateTrack() {
   let lastPoint = new Point(400, 400);
 
-  const vectors: Vector[] = [];
+  const lines: Line[] = [];
 
   for (let i = 0; i < 20; i++) {
-    const lastVector = vectors.at(-1);
+    const lastLine = lines.at(-1);
 
-    const nextVector = new Vector(
-      lastPoint,
-      new Point(lastPoint.x + 40, lastPoint.y + Math.random() * 100 - 50)
-    ).rotate(lastVector?.angle ?? 0, lastPoint);
+    const nextLine = new Vector(
+      40,  Math.random() * 100 - 50
+    ).rotate(lastLine?.getDirection().angle ?? 0).getLine(lastPoint);
 
-    vectors.push(nextVector);
+    lines.push(nextLine);
 
-    lastPoint = nextVector.end;
+    lastPoint = nextLine.end;
   }
 
-  return vectors;
+  return lines;
 }
 
 runLoop(setup());

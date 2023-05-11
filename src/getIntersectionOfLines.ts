@@ -1,16 +1,16 @@
-import { Vector } from "./Vector";
+import { Line } from "./Line";
 import { Point } from "./Point";
-import { isPointInVectorBBox } from "./isPointInVectorBBox";
+import { isPointInLineBBox } from "./isPointInLineBBox";
 
-export function getIntersectionOfVectors(vector1: Vector, vector2: Vector) {
-  const { x: x1, y: y1 } = vector1.start;
-  const { x: x2, y: y2 } = vector1.end;
-  const { x: x3, y: y3 } = vector2.start;
-  const { x: x4, y: y4 } = vector2.end;
+export function getIntersectionOfLines(line1: Line, line2: Line) {
+  const { x: x1, y: y1 } = line1.start;
+  const { x: x2, y: y2 } = line1.end;
+  const { x: x3, y: y3 } = line2.start;
+  const { x: x4, y: y4 } = line2.end;
 
   const denominator = (x1 - x2) * (y3 - y4) - (x3 - x4) * (y1 - y2);
 
-  // Vectors are parallel
+  // Lines are parallel
   if (denominator === 0) {
     return null;
   }
@@ -21,7 +21,7 @@ export function getIntersectionOfVectors(vector1: Vector, vector2: Vector) {
 
   const point = new Point(xNumerator / denominator, yNumerator / denominator);
 
-  if (!isPointInVectorBBox(vector1, point) || !isPointInVectorBBox(vector2, point)) {
+  if (!isPointInLineBBox(line1, point) || !isPointInLineBBox(line2, point)) {
     return null;
   }
 
