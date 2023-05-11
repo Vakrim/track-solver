@@ -1,14 +1,14 @@
 import { Point } from "./Point";
 
-export class Line {
+export class Vector {
   constructor(public start: Point, public end: Point) {}
 
-  add(other: Line) {
-    return new Line(this.start, this.end.subtract(other.start).add(other.end));
+  add(other: Vector) {
+    return new Vector(this.start, this.end.subtract(other.start).add(other.end));
   }
 
   rotate(angle: number, origin: Point) {
-    return new Line(
+    return new Vector(
       this.start.rotate(angle, origin),
       this.end.rotate(angle, origin)
     );

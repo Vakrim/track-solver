@@ -1,54 +1,54 @@
-import { Line } from "./Line";
+import { Vector } from "./Vector";
 import { Point } from "./Point";
-import { createCanvas, drawLine, getContext } from "./graphics";
+import { createCanvas, drawVector, getContext } from "./graphics";
 import { runLoop } from "./runLoop";
 import "./style.css";
 
 function setup() {
   createCanvas();
 
-  const middleLine = generateTrack();
+  const middleVector = generateTrack();
 
   function update() {}
 
   function draw() {
     getContext().strokeStyle = "black";
 
-    middleLine.forEach((line) => {
-      drawLine(line);
+    middleVector.forEach((vector) => {
+      drawVector(vector);
     });
   }
 
   return { update, draw };
 }
 
-// function generateBorders(middleLine: Line[]) {
-//   for(let i = 0; i < middleLine.length; i++) {
-//     const line = middleLine[i]; 
+// function generateBorders(middleVector: Vector[]) {
+//   for(let i = 0; i < middleVector.length; i++) {
+//     const vector = middleVector[i]; 
 
-//     const nextLine = middleLine[i + 1];
+//     const nextVector = middleVector[i + 1];
 //   }
 // };
 
 function generateTrack() {
   let lastPoint = new Point(400, 400);
 
-  const lines: Line[] = [];
+  const vectors: Vector[] = [];
 
   for (let i = 0; i < 20; i++) {
-    const lastLine = lines.at(-1);
+    const lastVector = vectors.at(-1);
 
-    const nextLine = new Line(
+    const nextVector = new Vector(
       lastPoint,
       new Point(lastPoint.x + 40, lastPoint.y + Math.random() * 100 - 50)
-    ).rotate(lastLine?.angle ?? 0, lastPoint);
+    ).rotate(lastVector?.angle ?? 0, lastPoint);
 
-    lines.push(nextLine);
+    vectors.push(nextVector);
 
-    lastPoint = nextLine.end;
+    lastPoint = nextVector.end;
   }
 
-  return lines;
+  return vectors;
 }
 
 

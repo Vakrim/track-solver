@@ -1,5 +1,5 @@
 import { Car } from "./Car";
-import { Line } from "./Line";
+import { Vector } from "./Vector";
 import { Network } from "./Network";
 import { Point } from "./Point";
 import { clamp } from "./clamp";
@@ -20,10 +20,10 @@ export function createCanvas() {
   context = canvas.getContext("2d")!;
 }
 
-export function drawLine(line: Line) {
+export function drawVector(vector: Vector) {
   context.beginPath();
-  context.moveTo(line.start.x, line.start.y);
-  context.lineTo(line.end.x, line.end.y);
+  context.moveTo(vector.start.x, vector.start.y);
+  context.lineTo(vector.end.x, vector.end.y);
   context.stroke();
 }
 

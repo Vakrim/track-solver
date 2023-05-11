@@ -1,9 +1,9 @@
-import { Line } from "./Line";
+import { Vector } from "./Vector";
 import { Point } from "./Point";
 
-export function isPointInLineBBox(line: Line, point: Point) {
-  const { x: x1, y: y1 } = line.start;
-  const { x: x2, y: y2 } = line.end;
+export function isPointInVectorBBox(vector: Vector, point: Point) {
+  const { x: x1, y: y1 } = vector.start;
+  const { x: x2, y: y2 } = vector.end;
 
   const minX = Math.min(x1, x2);
   const maxX = Math.max(x1, x2);

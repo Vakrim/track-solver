@@ -1,8 +1,8 @@
-import { Line } from "./Line";
+import { Vector } from "./Vector";
 import { Network } from "./Network";
 import { Point } from "./Point";
 import { Track } from "./Track";
-import { getIntersectionOfLines } from "./getIntersectionOfLines";
+import { getIntersectionOfVectors } from "./getIntersectionOfVectors";
 import { drawPoint } from "./graphics";
 
 export class Car {
@@ -46,7 +46,7 @@ export class Car {
       this.position.y + Math.sin(this.orientation) * this.speed
     );
 
-    const velocity = new Line(this.position, nextPosition);
+    const velocity = new Vector(this.position, nextPosition);
 
     const isCollision = this.getIsCollision(track, velocity);
 
@@ -59,9 +59,9 @@ export class Car {
     this.position = nextPosition;
   }
 
-  getIsCollision(track: Track, velocity: Line) {
-    const collision = track.lines.some((line) => {
-      const intersection = getIntersectionOfLines(velocity, line);
+  getIsCollision(track: Track, velocity: Vector) {
+    const collision = track.vectors.some((vector) => {
+      const intersection = getIntersectionOfVectors(velocity, vector);
 
       if (!intersection) {
         return false;
@@ -75,10 +75,10 @@ export class Car {
     return collision;
   }
 
-  checkGate(track: Track, velocity: Line) {
+  checkGate(track: Track, velocity: Vector) {
     const gate = track.gates[this.nextGateIndex];
 
-    const intersection = getIntersectionOfLines(velocity, gate);
+    const intersection = getIntersectionOfVectors(velocity, gate);
 
     if (intersection) {
       this.currentGateScore++;
@@ -102,7 +102,7 @@ export class Car {
   private castRay(track: Track, angle: number) {
     const rayAngle = this.orientation + angle;
 
-    const ray = new Line(
+    const ray = new Vector(
       this.position,
       new Point(
         this.position.x + Math.cos(rayAngle) * this.rayLength,
@@ -110,11 +110,11 @@ export class Car {
       )
     );
 
-    const closestIntersection = track.lines.reduce<{
+    const closestIntersection = track.vectors.reduce<{
       point: Point;
       distance: number;
-    } | null>((closest, line): { point: Point; distance: number } | null => {
-      const intersection = getIntersectionOfLines(ray, line);
+    } | null>((closest, vector): { point: Point; distance: number } | null => {
+      const intersection = getIntersectionOfVectors(ray, vector);
 
       if (!intersection) {
         return closest;

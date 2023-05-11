@@ -5,7 +5,7 @@ import { createTrack } from "./createTrack";
 import {
   createCanvas,
   drawCar,
-  drawLine,
+  drawVector,
   drawNetwork,
   getContext,
 } from "./graphics";
@@ -66,14 +66,14 @@ function setup() {
   function draw() {
     getContext().strokeStyle = "black";
 
-    track.lines.forEach((line) => {
-      drawLine(line);
+    track.vectors.forEach((vector) => {
+      drawVector(vector);
     });
 
     track.gates.forEach((gate, index) => {
       getContext().strokeStyle = indexToColor(index);
 
-      drawLine(gate);
+      drawVector(gate);
     });
 
     for (let i = 0; i < cars.length; i++) {
