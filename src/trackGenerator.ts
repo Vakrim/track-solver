@@ -7,14 +7,14 @@ import "./style.css";
 function setup() {
   createCanvas();
 
-  const middleVector = generateTrack();
+  const middleLine = generateTrack();
 
   function update() {}
 
   function draw() {
     getContext().strokeStyle = "black";
 
-    middleVector.forEach((vector) => {
+    middleLine.forEach((vector) => {
       drawVector(vector);
     });
   }
@@ -22,13 +22,14 @@ function setup() {
   return { update, draw };
 }
 
-// function generateBorders(middleVector: Vector[]) {
-//   for(let i = 0; i < middleVector.length; i++) {
-//     const vector = middleVector[i]; 
+function generateBorders(middleLine: Vector[]) {
+  for (let i = 0; i < middleLine.length - 1; i++) {
+    const vector = middleLine[i];
+    const nextVector = middleLine[i + 1];
 
-//     const nextVector = middleVector[i + 1];
-//   }
-// };
+    const vector.subtract(nextVector).normalize().multiply(10).moveTo(vector.end);
+  }
+}
 
 function generateTrack() {
   let lastPoint = new Point(400, 400);
@@ -50,6 +51,5 @@ function generateTrack() {
 
   return vectors;
 }
-
 
 runLoop(setup());
