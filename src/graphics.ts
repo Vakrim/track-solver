@@ -6,13 +6,14 @@ import { clamp } from "./clamp";
 import { hsl } from "./indexToColor";
 
 let context: CanvasRenderingContext2D;
+let canvas: HTMLCanvasElement;
 
 export function getContext() {
   return context;
 }
 
-export function createCanvasAndGetContext() {
-  const canvas = document.createElement("canvas");
+export function createCanvas() {
+  canvas = document.createElement("canvas");
   canvas.width = 2000;
   canvas.height = 600;
   document.body.appendChild(canvas);
@@ -42,7 +43,7 @@ export function drawCar(car: Car) {
 }
 
 export function clearScreen() {
-  context.clearRect(0, 0, 800, 600);
+  context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 export function drawNetwork(network: Network, x: number, y: number) {

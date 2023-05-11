@@ -3,8 +3,7 @@ import { Network } from "./Network";
 import { Point } from "./Point";
 import { createTrack } from "./createTrack";
 import {
-  clearScreen,
-  createCanvasAndGetContext,
+  createCanvas,
   drawCar,
   drawLine,
   drawNetwork,
@@ -13,9 +12,10 @@ import {
 import { indexToColor } from "./indexToColor";
 import { getPreTrainedNetworks } from "./getPreTrained";
 import "./style.css";
+import { runLoop } from "./runLoop";
 
 function setup() {
-  createCanvasAndGetContext();
+  createCanvas();
 
   const track = createTrack();
 
@@ -25,9 +25,7 @@ function setup() {
 
   let gateHighScore = 0;
 
-  return function update() {
-    clearScreen();
-
+  function update() {
     for (
       let compression = 0;
       compression < window.timeCompression;
@@ -63,7 +61,9 @@ function setup() {
         }
       }
     }
+  }
 
+  function draw() {
     getContext().strokeStyle = "black";
 
     track.lines.forEach((line) => {
@@ -85,6 +85,11 @@ function setup() {
       600,
       20
     );
+  }
+
+  return {
+    update,
+    draw,
   };
 }
 
@@ -103,12 +108,7 @@ function createCar(goodNetworks: Network[]) {
   return car;
 }
 
-const update = setup();
-
-requestAnimationFrame(function loop() {
-  update();
-  requestAnimationFrame(loop);
-});
+runLoop(setup());
 
 window.timeCompression = 1;
 
