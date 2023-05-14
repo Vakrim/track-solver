@@ -12,7 +12,7 @@ import { indexToColor } from "./indexToColor";
 import { getPreTrainedNetworks } from "./getPreTrained";
 import "./style.css";
 import { runLoop } from "./runLoop";
-import { Vector } from "./Vector";
+import { Track } from "./Track";
 
 function setup() {
   createCanvas();
@@ -21,7 +21,9 @@ function setup() {
 
   const goodNetworks: Network[] = getPreTrainedNetworks();
 
-  const cars = Array.from({ length: 100 }, () => createCar(goodNetworks));
+  const cars = Array.from({ length: 100 }, () =>
+    createCar(goodNetworks, track)
+  );
 
   let gateHighScore = 0;
 
@@ -34,7 +36,7 @@ function setup() {
       for (let i = 0; i < cars.length; i++) {
         cars[i].update(track);
 
-        if (cars[i].currentGateScore > gateHighScore + 10) {
+        if (cars[i].score > gateHighScore + 10) {
           // kill car to share knowledge
           cars[i].isDead = true;
         }
@@ -42,8 +44,8 @@ function setup() {
         if (cars[i].isDead) {
           const deadCar = cars[i];
 
-          if (deadCar.currentGateScore > gateHighScore) {
-            gateHighScore = cars[i].currentGateScore;
+          if (deadCar.score > gateHighScore) {
+            gateHighScore = cars[i].score;
 
             if (goodNetworks.length >= 10) {
               goodNetworks.shift();
@@ -57,7 +59,7 @@ function setup() {
             console.groupEnd();
           }
 
-          cars[i] = createCar(goodNetworks);
+          cars[i] = createCar(goodNetworks, track);
         }
       }
     }
@@ -93,17 +95,16 @@ function setup() {
   };
 }
 
-function createCar(goodNetworks: Network[]) {
-  const car = new Car(new Vector(120, 80));
-
+function createCar(goodNetworks: Network[], track: Track) {
   const randomNetwork =
     Math.random() < 0.5
       ? sample(goodNetworks)
       : sample(getPreTrainedNetworks());
 
-  car.network = randomNetwork.clone();
+  const car = new Car(randomNetwork.mutate());
 
-  car.network.mutate();
+  car.position = track.startPosition;
+  car.orientation = track.startDirection;
 
   return car;
 }

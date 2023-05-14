@@ -32,7 +32,7 @@ export function createTrack() {
     gates.push(new Line(new Vector(...start), new Vector(...end)));
   }
 
-  return new Track(lines, gates, new Vector(120, 90), Math.PI * 0.5);
+  return new Track(lines, gates, new Vector(150, 80), Math.PI * 0.75);
 }
 
 const right: [number, number][] = [

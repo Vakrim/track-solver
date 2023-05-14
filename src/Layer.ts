@@ -3,7 +3,7 @@ import { Matrix } from "./Matrix";
 export class Layer {
   constructor(public weights: Matrix, public bias: Matrix) {}
 
-  mutate(mutationChance = 0.03, mutationRate = 0.25) {
+  mutateSelf(mutationChance = 0.03, mutationRate = 0.25) {
     this.weights = this.weights.map((value) => {
       if (Math.random() < mutationChance) {
         return value + (Math.random() * 2 - 1) * mutationRate;
@@ -19,6 +19,12 @@ export class Layer {
 
       return value;
     });
+  }
+
+  mutate(mutationChance = 0.03, mutationRate = 0.25) {
+    const mutant = this.clone();
+    mutant.mutateSelf(mutationChance, mutationRate);
+    return mutant;
   }
 
   clone() {

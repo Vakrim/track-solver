@@ -53,7 +53,15 @@ export class Network {
   }
 
   mutate(mutationChance = 0.1, mutationRate = 0.15) {
-    this.layers.forEach((layer) => layer.mutate(mutationChance, mutationRate));
+    return new Network(
+      this.layers.map((layer) => layer.mutate(mutationChance, mutationRate))
+    );
+  }
+
+  mutateSelf(mutationChance = 0.1, mutationRate = 0.15) {
+    this.layers.forEach((layer) =>
+      layer.mutateSelf(mutationChance, mutationRate)
+    );
   }
 
   clone() {

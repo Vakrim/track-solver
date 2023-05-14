@@ -6,21 +6,21 @@ import { getIntersectionOfLines } from "./getIntersectionOfLines";
 import { drawPoint } from "./graphics";
 
 export class Car {
-  public orientation = Math.random() * 0.2 - 0.1 + Math.PI * 0.5;
+  public orientation = 0;
   public speed = 1;
   public rayLength = 100;
   public isDead = false;
-  public currentGateScore = 0;
+  public score = 0;
   public nextGateIndex = 0;
+  public position = new Vector(0, 0);
 
   public life = 200;
 
-  public network = Network.createRandom(6, [5], 2);
-
-  constructor(public position: Vector) {}
+  constructor(public network = Network.createRandom(6, [5], 2)) {}
 
   update(track: Track) {
     this.life--;
+    this.score--;
     if (this.life <= 0) {
       this.isDead = true;
       return;
@@ -81,9 +81,15 @@ export class Car {
     const intersection = getIntersectionOfLines(velocity, gate);
 
     if (intersection) {
-      this.currentGateScore++;
-      this.nextGateIndex = this.currentGateScore % track.gates.length;
-      this.life = 50;
+      this.score += 200;
+      this.nextGateIndex++;
+
+      if (this.nextGateIndex >= track.gates.length) {
+        this.isDead = true;
+        return;
+      }
+
+      this.life = 100;
     }
   }
 
