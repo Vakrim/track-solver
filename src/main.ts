@@ -1,6 +1,5 @@
 import { Car } from "./Car";
 import { Network } from "./Network";
-import { Point } from "./Point";
 import { createTrack } from "./createTrack";
 import {
   createCanvas,
@@ -13,6 +12,7 @@ import { indexToColor } from "./indexToColor";
 import { getPreTrainedNetworks } from "./getPreTrained";
 import "./style.css";
 import { runLoop } from "./runLoop";
+import { Vector } from "./Vector";
 
 function setup() {
   createCanvas();
@@ -66,7 +66,7 @@ function setup() {
   function draw() {
     getContext().strokeStyle = "black";
 
-    track.lines.forEach((line) => {
+    track.boundaries.forEach((line) => {
       drawLine(line);
     });
 
@@ -94,7 +94,7 @@ function setup() {
 }
 
 function createCar(goodNetworks: Network[]) {
-  const car = new Car(new Point(120, 80));
+  const car = new Car(new Vector(120, 80));
 
   const randomNetwork =
     Math.random() < 0.5

@@ -1,7 +1,7 @@
 import { Line } from "./Line";
 import { Network } from "./Network";
-import { Point } from "./Point";
 import { Track } from "./Track";
+import { Vector } from "./Vector";
 import { getIntersectionOfLines } from "./getIntersectionOfLines";
 import { drawPoint } from "./graphics";
 
@@ -17,7 +17,7 @@ export class Car {
 
   public network = Network.createRandom(6, [5], 2);
 
-  constructor(public position: Point) {}
+  constructor(public position: Vector) {}
 
   update(track: Track) {
     this.life--;
@@ -41,7 +41,7 @@ export class Car {
     this.orientation += steeringOutput * 0.1;
     this.speed += accelerationOutput * 0.1;
 
-    const nextPosition = new Point(
+    const nextPosition = new Vector(
       this.position.x + Math.cos(this.orientation) * this.speed,
       this.position.y + Math.sin(this.orientation) * this.speed
     );
@@ -60,7 +60,7 @@ export class Car {
   }
 
   getIsCollision(track: Track, velocity: Line) {
-    const collision = track.lines.some((line) => {
+    const collision = track.boundaries.some((line) => {
       const intersection = getIntersectionOfLines(velocity, line);
 
       if (!intersection) {
@@ -104,16 +104,16 @@ export class Car {
 
     const ray = new Line(
       this.position,
-      new Point(
+      new Vector(
         this.position.x + Math.cos(rayAngle) * this.rayLength,
         this.position.y + Math.sin(rayAngle) * this.rayLength
       )
     );
 
-    const closestIntersection = track.lines.reduce<{
-      point: Point;
+    const closestIntersection = track.boundaries.reduce<{
+      point: Vector;
       distance: number;
-    } | null>((closest, line): { point: Point; distance: number } | null => {
+    } | null>((closest, line): { point: Vector; distance: number } | null => {
       const intersection = getIntersectionOfLines(ray, line);
 
       if (!intersection) {
@@ -140,6 +140,6 @@ export class Car {
   }
 }
 
-function getDistanceBetweenPoints(a: Point, b: Point) {
+function getDistanceBetweenPoints(a: Vector, b: Vector) {
   return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 }

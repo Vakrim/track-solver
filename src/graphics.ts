@@ -1,7 +1,8 @@
 import { Car } from "./Car";
 import { Line } from "./Line";
 import { Network } from "./Network";
-import { Point } from "./Point";
+import { Track } from "./Track";
+import { Vector } from "./Vector";
 import { clamp } from "./clamp";
 import { hsl } from "./indexToColor";
 
@@ -14,8 +15,8 @@ export function getContext() {
 
 export function createCanvas() {
   canvas = document.createElement("canvas");
-  canvas.width = 2000;
-  canvas.height = 600;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
   document.body.appendChild(canvas);
   context = canvas.getContext("2d")!;
 }
@@ -27,7 +28,7 @@ export function drawLine(line: Line) {
   context.stroke();
 }
 
-export function drawPoint(point: Point) {
+export function drawPoint(point: Vector) {
   context.beginPath();
   context.arc(point.x, point.y, 5, 0, Math.PI * 2);
   context.fill();
@@ -71,4 +72,18 @@ export function drawNetwork(network: Network, x: number, y: number) {
       }
     }
   }
+}
+
+export function drawTrack(track: Track) {
+  context.strokeStyle = "#ddd";
+
+  track.boundaries.forEach((line) => {
+    drawLine(line);
+  });
+
+  context.strokeStyle = "#33d";
+
+  track.gates.forEach((gate) => {
+    drawLine(gate);
+  });
 }

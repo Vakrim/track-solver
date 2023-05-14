@@ -1,9 +1,9 @@
 import { Line } from "./Line";
-import { Point } from "./Point";
 import { Track } from "./Track";
+import { Vector } from "./Vector";
 
 export function createTrack() {
-  let points = right.map(([x, y]) => new Point(x, y));
+  let points = right.map(([x, y]) => new Vector(x, y));
 
   const lines: Line[] = [];
 
@@ -14,7 +14,7 @@ export function createTrack() {
     lines.push(new Line(start, end));
   }
 
-  points = left.map(([x, y]) => new Point(x, y));
+  points = left.map(([x, y]) => new Vector(x, y));
 
   for (let i = 0; i < points.length; i++) {
     const start = points.at(i - 1)!;
@@ -29,13 +29,10 @@ export function createTrack() {
     const start = left.at(i)!;
     const end = right.at(i)!;
 
-    gates.push(new Line(new Point(...start), new Point(...end)));
+    gates.push(new Line(new Vector(...start), new Vector(...end)));
   }
 
-  return new Track({
-    lines,
-    gates,
-  });
+  return new Track(lines, gates, new Vector(120, 90), Math.PI * 0.5);
 }
 
 const right: [number, number][] = [

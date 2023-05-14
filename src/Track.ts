@@ -1,16 +1,11 @@
 import { Line } from "./Line";
+import { Vector } from "./Vector";
 
 export class Track {
-  public lines: Line[];
-  public gates: Line[];
-
-  constructor({ lines, gates }: TrackData) {
-    this.lines = lines;
-    this.gates = gates;
-  }
-}
-
-interface TrackData {
-  lines: Line[];
-  gates: Line[];
+  constructor(
+    public boundaries: Line[],
+    public gates: Line[],
+    public startPosition: Vector,
+    public startDirection: number
+  ) {}
 }

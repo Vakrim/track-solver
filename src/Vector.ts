@@ -1,5 +1,4 @@
 import { Line } from "./Line";
-import { Point } from "./Point";
 
 interface PointLike {
   x: number;
@@ -21,6 +20,10 @@ export class Vector {
     return new Vector(this.x * factor, this.y * factor);
   }
 
+  divide(factor: number) {
+    return new Vector(this.x / factor, this.y / factor);
+  }
+
   normalize() {
     const length = this.length;
 
@@ -34,7 +37,7 @@ export class Vector {
     );
   }
 
-  getLine(start: Point) {
+  getLine(start: Vector) {
     return new Line(start, start.add(this));
   }
 
