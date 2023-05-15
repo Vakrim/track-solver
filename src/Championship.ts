@@ -4,12 +4,12 @@ import { Track } from "./Track";
 import { generateTrack } from "./generateTrack";
 
 const NUMBER_OF_CARS = 100;
-const NUMBER_OF_RACES = 15;
+export const NUMBER_OF_RACES = 15;
 
 export class Championship {
   networks: Network[];
   race: Race;
-  scores: Map<Network, number>;
+  scores: Map<Network, number[]>;
   raceNumber = 0;
   isFinished: boolean = false;
 
@@ -24,7 +24,7 @@ export class Championship {
       return network.clone();
     });
 
-    this.scores = new Map(this.networks.map((network) => [network, 0]));
+    this.scores = new Map(this.networks.map((network) => [network, []]));
 
     this.race = new Race(this.networks);
   }
@@ -42,7 +42,7 @@ export class Championship {
       const scores = this.race.getScores();
 
       for (const [network, score] of scores) {
-        this.scores.set(network, this.scores.get(network)! + score);
+        this.scores.get(network)!.push(score);
       }
 
       if (this.raceNumber >= NUMBER_OF_RACES) {

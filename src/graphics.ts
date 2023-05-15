@@ -87,3 +87,8 @@ export function drawTrack(track: Track) {
     drawLine(gate);
   });
 }
+
+export function drawText(x: number, y: number, text: string, color = "#fff") {
+  context.fillStyle = color;
+  context.fillText(text, x, y);
+}
