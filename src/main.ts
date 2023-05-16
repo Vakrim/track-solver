@@ -51,7 +51,7 @@ function setup() {
               goodNetworks.shift();
             }
 
-            goodNetworks.push(deadCar.network.clone());
+            goodNetworks.push(deadCar.network);
 
             console.log(gateHighScore);
             console.groupCollapsed("Networks");

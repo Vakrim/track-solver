@@ -3,7 +3,6 @@ import { Network } from "./Network";
 import { Track } from "./Track";
 import { Vector } from "./Vector";
 import { getIntersectionOfLines } from "./getIntersectionOfLines";
-import { drawPoint } from "./graphics";
 
 export class Car {
   public orientation = 0;
@@ -39,7 +38,7 @@ export class Car {
     const accelerationOutput = outputs[1];
 
     this.orientation += steeringOutput * 0.1;
-    this.speed += accelerationOutput * 0.1;
+    this.speed += accelerationOutput * 0.3;
 
     const nextPosition = new Vector(
       this.position.x + Math.cos(this.orientation) * this.speed,
@@ -67,8 +66,6 @@ export class Car {
         return false;
       }
 
-      drawPoint(intersection);
-
       return true;
     });
 
@@ -85,6 +82,8 @@ export class Car {
       this.nextGateIndex++;
 
       if (this.nextGateIndex >= track.gates.length) {
+        this.score += 500;
+
         this.isDead = true;
         return;
       }

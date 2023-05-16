@@ -79,8 +79,24 @@ export class Matrix {
     return new Matrix(this.rows, this.cols, data);
   }
 
-  clone() {
-    return new Matrix(this.rows, this.cols, [...this.data]);
+  get size() {
+    return this.rows * this.cols;
+  }
+
+  getAt(index: number) {
+    if (index < 0 || index >= this.size)
+      throw new Error(`Index ${index} out of bounds`);
+
+    return this.data[index];
+  }
+
+  setAt(index: number, value: number) {
+    if (index < 0 || index >= this.size)
+      throw new Error(`Index ${index} out of bounds`);
+
+    const data = [...this.data];
+    data[index] = value;
+    return new Matrix(this.rows, this.cols, data);
   }
 
   serialize() {

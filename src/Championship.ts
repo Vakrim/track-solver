@@ -14,15 +14,19 @@ export class Championship {
   isFinished: boolean = false;
 
   constructor(public initialNetworks: Network[]) {
-    this.networks = Array.from({ length: NUMBER_OF_CARS }, (_, index) => {
-      let network = initialNetworks[index % initialNetworks.length];
+    this.networks = [...initialNetworks];
 
-      if (index >= initialNetworks.length) {
-        network.mutateSelf();
-      }
+    while (this.networks.length < NUMBER_OF_CARS) {
+      const network =
+        initialNetworks[Math.floor(Math.random() * initialNetworks.length)];
 
-      return network.clone();
-    });
+      const index = Math.floor(Math.random() * network.size);
+
+      this.networks.push(
+        network.setAt(index, (v) => v - 0.1),
+        network.setAt(index, (v) => v + 0.1)
+      );
+    }
 
     this.scores = new Map(this.networks.map((network) => [network, []]));
 

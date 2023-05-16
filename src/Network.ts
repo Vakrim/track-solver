@@ -58,22 +58,56 @@ export class Network {
     );
   }
 
-  mutateSelf(mutationChance = 0.1, mutationRate = 0.15) {
-    this.layers.forEach((layer) =>
-      layer.mutateSelf(mutationChance, mutationRate)
-    );
-  }
-
-  clone() {
-    return new Network(
-      this.layers.map(
-        (layer) => new Layer(layer.weights.clone(), layer.bias.clone())
-      )
-    );
-  }
-
   serialize() {
     return JSON.stringify(this);
+  }
+
+  get size() {
+    return this.layers.reduce((sum, layer) => sum + layer.size, 0);
+  }
+
+  getAt(index: number) {
+    if (index < 0 || index >= this.size) {
+      throw new Error(`Index ${index} is out of bounds [0, ${this.size})`);
+    }
+
+    let layerIndex = 0;
+
+    while (index >= this.layers[layerIndex].size) {
+      index -= this.layers[layerIndex].size;
+      layerIndex++;
+    }
+
+    return this.layers[layerIndex].getAt(index);
+  }
+
+  setAt(index: number, setterOrValue: number | ((prev: number) => number)) {
+    if (index < 0 || index >= this.size) {
+      throw new Error(`Index ${index} is out of bounds [0, ${this.size})`);
+    }
+
+    let layerIndex = 0;
+
+    while (index >= this.layers[layerIndex].size) {
+      index -= this.layers[layerIndex].size;
+      layerIndex++;
+    }
+
+    return new Network(
+      this.layers.map((layer, i) => {
+        if (i !== layerIndex) {
+          return layer;
+        }
+
+        if (typeof setterOrValue === "number") {
+          return layer.setAt(index, setterOrValue);
+        }
+
+        const value = setterOrValue(layer.getAt(index));
+
+        return layer.setAt(index, value);
+      })
+    );
   }
 
   static deserialize(data: string) {
